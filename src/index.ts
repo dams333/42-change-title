@@ -14,12 +14,19 @@ const axios = require('axios').default;
 
     const rl = readline.createInterface({ input, output });
 
-    const login = await rl.question('Login: ');
+    const login = process.env.LOGIN;
+    if(!login)
+    {
+        console.log("Please set LOGIN environment variable");
+        rl.close();
+        process.exit(1);
+    }
 
     const user = await client.users.get(login);
     if(!user)
     {
         console.log('User not found');
+        rl.close();
         return;
     }
     //Get titles
@@ -39,12 +46,14 @@ const axios = require('axios').default;
     if(isNaN(title))
     {
         console.log('Please choose a real number');
+        rl.close();
         return;
     }
 
     if(title < 0 || title >= titles_user.length)
     {
         console.log('Please choose a real number');
+        rl.close();
         return;
     }
 
